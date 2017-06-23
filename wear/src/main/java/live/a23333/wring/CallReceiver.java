@@ -34,7 +34,7 @@ public class CallReceiver extends PhonecallReceiver {
             // Toast.makeText(ctx, "", Toast.LENGTH_SHORT).show();
             return;
         }
-        Toast.makeText(ctx, "离腕响铃中...", Toast.LENGTH_SHORT).show();
+        Toast.makeText(ctx, ctx.getString(R.string.ringing), Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(ctx , RingService.class);
         ctx.startService(intent);
     }

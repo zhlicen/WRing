@@ -3,14 +3,100 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/black"
     tools:context="live.a23333.wring.MainActivity"
     tools:deviceIds="wear_round">
 
-    <Button
-        android:text=""
+    <android.support.wearable.view.BoxInsetLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/id_btn_main"
-        android:layout_centerVertical="true"
-        android:layout_alignParentStart="true" />
+        android:padding="15dp">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="3dp"
+            app:layout_box="all">
+
+            <RelativeLayout
+                android:layout_height="50dp"
+                android:layout_gravity="top|center"
+                android:layout_width="match_parent">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:layout_marginTop="5dp"
+                android:weightSum="1">
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="false"
+                    android:layout_weight="1"
+                    android:text="@string/sms"
+                    android:textSize="16sp" />
+
+                <Button
+                    android:id="@+id/id_btn_ring"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/check"
+                    />
+            </LinearLayout>
+
+                <Button
+                    android:id="@+id/id_btn_ring_click"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerVertical="true"
+                    android:background="#00000000"
+                    android:foreground="?android:attr/selectableItemBackgroundBorderless" />
+            </RelativeLayout>>
+            <RelativeLayout
+                android:layout_height="50dp"
+                android:layout_gravity="bottom|center"
+                android:layout_width="match_parent">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:layout_marginBottom="3dp"
+                android:weightSum="1">
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_weight="1"
+                    android:text="@string/sms"
+                    android:textSize="16sp" />
+
+                <Button
+                    android:id="@+id/id_btn_sms"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/uncheck" />
+            </LinearLayout>
+
+                <Button
+                    android:id="@+id/id_btn_sms_click"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerVertical="true"
+                    android:background="#00000000"
+                    android:foreground="?android:attr/selectableItemBackgroundBorderless" />
+            </RelativeLayout>
+
+        </FrameLayout>
+    </android.support.wearable.view.BoxInsetLayout>
 </RelativeLayout>

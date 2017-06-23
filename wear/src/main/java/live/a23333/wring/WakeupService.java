@@ -11,7 +11,9 @@ import android.support.annotation.IntDef;
 import android.support.v4.app.NotificationCompat;
 
 public class WakeupService extends Service {
+    public static WakeupService mInstance;
     public WakeupService() {
+
     }
 
     @Override
@@ -28,7 +30,14 @@ public class WakeupService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+        mInstance = this;
         runAsForeground();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mInstance = null;
     }
 
     private void runAsForeground(){
@@ -36,8 +45,8 @@ public class WakeupService extends Service {
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
                 notificationIntent, 0);
         Notification notification=new NotificationCompat.Builder(this)
-                .setContentText("工作中...")
-                .setContentTitle("离腕响铃")
+                .setContentText("Runing...")
+                .setContentTitle("WRing")
                 .setContentIntent(pendingIntent).build();
 
         startForeground(123, notification);

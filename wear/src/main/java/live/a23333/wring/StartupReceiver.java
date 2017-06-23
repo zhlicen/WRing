@@ -17,7 +17,9 @@ public class StartupReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
 
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE)
-                == PackageManager.PERMISSION_GRANTED) {
+                == PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(context, Manifest.permission.RECEIVE_SMS)
+                        == PackageManager.PERMISSION_GRANTED) {
             Intent i = new Intent(context, WakeupService.class);
             context.startService(i);
         }

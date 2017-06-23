@@ -1,31 +1,25 @@
 package live.a23333.wring;
-
 import android.Manifest;
 import android.app.Activity;
-import android.app.KeyguardManager;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
-import android.media.AudioManager;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.wearable.view.WatchViewStub;
-import android.util.Log;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.Locale;
+
 
 public class MainActivity extends Activity {
 
-    private Button mBtnMain;
-
+    private Button mBtnRing;
+    private Button mBtnSms;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,17 +29,39 @@ public class MainActivity extends Activity {
         stub.setOnLayoutInflatedListener(new WatchViewStub.OnLayoutInflatedListener() {
             @Override
             public void onLayoutInflated(WatchViewStub stub) {
-                mBtnMain = (Button) stub.findViewById(R.id.id_btn_main);
-                mBtnMain.setOnClickListener(new View.OnClickListener() {
+                mBtnRing = (Button) stub.findViewById(R.id.id_btn_ring);
+                Button btnRingClick = (Button) stub.findViewById(R.id.id_btn_ring_click);
+                btnRingClick.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if(isWorking()) {
+                        if(isRingWorking()) {
+                            Toast.makeText(MainActivity.this, getString(R.string.disable_ntf),
+                                    Toast.LENGTH_SHORT).show();
                             Intent i = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
                                     Uri.fromParts("package", getPackageName(), null));
                             startActivity(i);
                         }
                         else {
                             requestPermissions(new String[]{Manifest.permission.READ_PHONE_STATE},
+                                    5);
+                        }
+                    }
+                });
+
+                mBtnSms = (Button) stub.findViewById(R.id.id_btn_sms);
+                Button btnSmsClick = (Button) stub.findViewById(R.id.id_btn_sms_click);
+                btnSmsClick.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(isSmsWorking()) {
+                            Toast.makeText(MainActivity.this, getString(R.string.disable_ntf),
+                                    Toast.LENGTH_SHORT).show();
+                            Intent i = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                                    Uri.fromParts("package", getPackageName(), null));
+                            startActivity(i);
+                        }
+                        else {
+                            requestPermissions(new String[]{Manifest.permission.RECEIVE_SMS},
                                     5);
                         }
                     }
@@ -65,28 +81,52 @@ public class MainActivity extends Activity {
 
 
     public void updateBtnStatus() {
-        if (isWorking()) {
-            mBtnMain.setText("服务开启，点击关闭权限，停止服务");
-            Intent i = new Intent(this, WakeupService.class);
-            startService(i);
+        if (isRingWorking()) {
+            mBtnRing.setBackground(getDrawable(R.drawable.check));
+        }
+        else {
+            mBtnRing.setBackground(getDrawable(R.drawable.uncheck));
+        }
+
+        if (isSmsWorking()) {
+            mBtnSms.setBackground(getDrawable(R.drawable.check));
 
         }
         else {
-            mBtnMain.setText("服务停止，点击授权，开启服务");
-            Intent i = new Intent(this, WakeupService.class);
-            stopService(i);
+            mBtnSms.setBackground(getDrawable(R.drawable.uncheck));
         }
+        updateService();
     }
 
-    public boolean isWorking(){
+    public boolean isRingWorking(){
         return checkSelfPermission(Manifest.permission.READ_PHONE_STATE)
                 == PackageManager.PERMISSION_GRANTED;
+    }
+
+    public boolean  isSmsWorking(){
+        return checkSelfPermission(Manifest.permission.RECEIVE_SMS)
+                == PackageManager.PERMISSION_GRANTED;
+    }
+
+    public void updateService() {
+        if(isRingWorking() || isSmsWorking()) {
+            if(WakeupService.mInstance == null) {
+                Intent i = new Intent(this, WakeupService.class);
+                startService(i);
+            }
+        }
+        if(!isRingWorking() && !isSmsWorking()) {
+            if(WakeupService.mInstance != null) {
+                Intent i = new Intent(this, WakeupService.class);
+                stopService(i);
+            }
+        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if(mBtnMain != null) {
+        if(mBtnRing != null) {
             updateBtnStatus();
         }
     }

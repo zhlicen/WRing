@@ -15,15 +15,11 @@ import android.util.Log;
 
 
 public abstract class PhonecallReceiver extends BroadcastReceiver {
-
-    //The receiver will be recreated whenever android feels like it.  We need a static variable to remember data between instantiations
-
     private static int lastState = TelephonyManager.CALL_STATE_IDLE;
     private static Date callStartTime;
     private static boolean isIncoming;
     private static String savedNumber;  //because the passed incoming is only valid in ringing
     public Context mContext;
-    public boolean isRinging = false;
 
 
     @Override

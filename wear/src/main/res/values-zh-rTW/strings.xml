@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">離腕響鈴</string>
+    <string name="disable_ntf">通過禁用權限來停止服務</string>
+    <string name="ring">來電響鈴</string>
+    <string name="sms">簡訊響鈴</string>
+    <string name="title_activity_main">離腕響鈴</string>
+    <string name="ringing">離腕響鈴中...</string>
+</resources>

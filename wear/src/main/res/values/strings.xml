@@ -1,4 +1,8 @@
 <resources>
-    <string name="app_name">离腕响铃</string>
-    <string name="title_activity_main">离腕响铃</string>
+    <string name="app_name">WRing</string>
+    <string name="title_activity_main">WRing</string>
+    <string name="ring">Phone Call</string>
+    <string name="sms">Message</string>
+    <string name="disable_ntf">Disable app permission to stop service</string>
+    <string name="ringing">WRing ringing...</string>
 </resources>

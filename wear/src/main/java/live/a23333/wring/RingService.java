@@ -3,6 +3,7 @@ package live.a23333.wring;
 /**
  * Created by zhlic on 6/15/2017.
  */
+import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -13,9 +14,7 @@ import android.os.IBinder;
 import android.os.Vibrator;
 import android.widget.Toast;
 
-public class RingService extends Service
-{
-    static boolean sIsRinging = false;
+public class RingService extends Service {
     static MediaPlayer thePlayer;
     static Vibrator vibrator;
     static int orgVol;
@@ -42,7 +41,6 @@ public class RingService extends Service
     }
 
     public static void startRing() {
-        sIsRinging = true;
         Context ctx = CallReceiver.mService;
         vibrator = (Vibrator)ctx.getSystemService(Context.VIBRATOR_SERVICE);
         thePlayer = MediaPlayer.create(ctx, RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE));
@@ -55,15 +53,17 @@ public class RingService extends Service
                                            },
                     AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
             orgVol = am.getStreamVolume(AudioManager.STREAM_MUSIC);
-            if(orgVol != 0)
-                am.setStreamVolume(AudioManager.STREAM_MUSIC, am.getStreamMaxVolume(AudioManager.STREAM_MUSIC),
+            float vol = am.getStreamVolume(AudioManager.STREAM_RING);
+            float max_vol = am.getStreamMaxVolume(AudioManager.STREAM_RING);
+            float scale = vol/max_vol;
+            am.setStreamVolume(AudioManager.STREAM_MUSIC,
+                    (int)(scale * am.getStreamMaxVolume(AudioManager.STREAM_MUSIC)),
                     0);
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        thePlayer.start();
         thePlayer.setLooping(true);
+        thePlayer.start();
         long[] pattern = {0, 1000, 1500};
         vibrator.vibrate(pattern, 0);
     }
@@ -87,7 +87,7 @@ public class RingService extends Service
             thePlayer = null;
         }
         AudioManager am = (AudioManager)ctx.getSystemService(Context.AUDIO_SERVICE);
-        am.setStreamVolume(AudioManager.STREAM_MUSIC, orgVol,
+         am.setStreamVolume(AudioManager.STREAM_MUSIC, orgVol,
                 0);
     }
 }
